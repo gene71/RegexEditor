@@ -1,0 +1,12 @@
+c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\bin\Debug\RegexEditor.exe.config
+c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\bin\Debug\RegexEditor.exe
+c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\bin\Debug\RegexEditor.pdb
+c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\obj\Debug\RegexEditor.csprojResolveAssemblyReference.cache
+c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\obj\Debug\RegexEditor.Form1.resources
+c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\obj\Debug\RegexEditor.Properties.Resources.resources
+c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\obj\Debug\RegexEditor.csproj.GenerateResource.Cache
+c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\obj\Debug\RegexEditor.exe
+c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\obj\Debug\RegexEditor.pdb
+C:\Users\gene\Source\Repos\RegexEditor\RegexEditor\RegexEditor\RegexEditor\bin\Debug\RegexEditor.exe.config
+C:\Users\gene\Source\Repos\RegexEditor\RegexEditor\RegexEditor\RegexEditor\obj\Debug\RegexEditor.exe
+C:\Users\gene\Source\Repos\RegexEditor\RegexEditor\RegexEditor\RegexEditor\obj\Debug\RegexEditor.pdb
