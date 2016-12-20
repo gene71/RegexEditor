@@ -10,3 +10,6 @@ c:\users\gene\documents\visual studio 2015\Projects\RegexEditor\RegexEditor\obj\
 C:\Users\gene\Source\Repos\RegexEditor\RegexEditor\RegexEditor\RegexEditor\bin\Debug\RegexEditor.exe.config
 C:\Users\gene\Source\Repos\RegexEditor\RegexEditor\RegexEditor\RegexEditor\obj\Debug\RegexEditor.exe
 C:\Users\gene\Source\Repos\RegexEditor\RegexEditor\RegexEditor\RegexEditor\obj\Debug\RegexEditor.pdb
+C:\Users\gene\Source\Repos\RegexEditor\RegexEditor\RegexEditor\bin\Debug\RegexEditor.exe.config
+C:\Users\gene\Source\Repos\RegexEditor\RegexEditor\RegexEditor\obj\Debug\RegexEditor.exe
+C:\Users\gene\Source\Repos\RegexEditor\RegexEditor\RegexEditor\obj\Debug\RegexEditor.pdb
