@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -35,24 +36,29 @@ namespace RegexEditor
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-           
-                
-                    if (!comboBox1.Items.Contains(comboBox1.Text))
-                    {
-                        comboBox1.Items.Add(comboBox1.Text);
-                        //fire mbox
-                        MessageBox.Show("added " + comboBox1.Text, "Info"
-                       , MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        //clear
-                        comboBox1.Text = "";
-                        saveToScanner();
+            if (validFileExt())
+            {
 
-                    }
-                
-            
-
-
-           
+                if (!comboBox1.Items.Contains(comboBox1.Text))
+                {
+                    comboBox1.Items.Add(comboBox1.Text);
+                    //fire mbox
+                    MessageBox.Show("added " + comboBox1.Text, "Info"
+                    , MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //clear
+                    comboBox1.Text = "";
+                    saveToScanner();
+                }
+            }
+            else if(comboBox1.Text == "")
+            {
+                //dont add anything
+            }
+            else
+            {
+                MessageBox.Show(comboBox1.Text + " is not a valid file extension", "Warning"
+                    , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         /// <summary>
@@ -99,6 +105,33 @@ namespace RegexEditor
                 }
 
            }
+        }
+        /// <summary>
+        /// Done
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button3_Click(object sender, EventArgs e)
+        {
+            button1_Click(this, null);
+            this.Close();
+        }
+
+        /// <summary>
+        /// validates the file extension
+        /// </summary>
+        /// <returns></returns>
+        private bool validFileExt()
+        {
+            if (Regex.IsMatch(comboBox1.Text, "[.][a-z]+"))
+            {
+                return true;
+            }
+            else
+            {
+
+                return false;
+            }
         }
     }
 }

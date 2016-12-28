@@ -1,5 +1,6 @@
 ﻿using CR.Core;
 using CR.Core.Services;
+using CR.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,15 +16,18 @@ namespace RegexEditor
     public partial class ScannerSaveForm : Form
     {
         CRScanner crScanner;
+        CRLogger crl;
         
         public ScannerSaveForm(CRScanner crs)
         {
             InitializeComponent();
             crScanner = crs;
-       
+            crl = new CRLogger();  
             initFormFeilds();
         }
-
+        /// <summary>
+        /// initialize form feilds
+        /// </summary>
         private void initFormFeilds()
         {
             textBox1.Text = crScanner.Name;
@@ -79,6 +83,8 @@ namespace RegexEditor
             {
                 MessageBox.Show(ex.Message, "Error"
                 , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                crl.WriteLog(CRLogger.CRLogTitle.Error, "Error while save file " +
+                        ex.Message);
             }
         }
     }

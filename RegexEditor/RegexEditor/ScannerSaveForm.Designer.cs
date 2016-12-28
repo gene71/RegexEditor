@@ -87,9 +87,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 324);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 13);
+            this.label3.Size = new System.Drawing.Size(153, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Patterns";
+            this.label3.Text = "Patterns (updated in main form)";
             // 
             // comboBox2
             // 
@@ -104,9 +104,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(12, 376);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(77, 13);
+            this.label4.Size = new System.Drawing.Size(184, 13);
             this.label4.TabIndex = 7;
-            this.label4.Text = "File Extensions";
+            this.label4.Text = "File Extensions (updated in main form)";
             // 
             // button1
             // 

@@ -1,4 +1,5 @@
 ﻿using CR.Core;
+using CR.Util;
 using System;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -8,10 +9,12 @@ namespace RegexEditor
     public partial class AddMulPatForm : Form
     {
         CRScanner crs;
+        CRLogger crl;
         public AddMulPatForm(CRScanner crs)
         {
             InitializeComponent();
             this.crs = crs;
+            crl = new CRLogger();
         }
         /// <summary>
         /// Cancel button
@@ -48,6 +51,8 @@ namespace RegexEditor
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
+                crl.WriteLog(CRLogger.CRLogTitle.Error, "Error while performing add patterns " +
+                        ex.Message);
             }
             
             //exit
