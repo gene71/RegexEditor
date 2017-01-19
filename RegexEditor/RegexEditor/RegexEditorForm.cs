@@ -204,7 +204,8 @@ namespace RegexEditor
         /// <param name="e"></param>
         private void quickScanToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           
+            //TODO: add threading
+            Cursor = Cursors.WaitCursor;
             crs.CRVID = "000000";//test id
             foreach (var p in comboBox1.Items)
             {
@@ -241,7 +242,7 @@ namespace RegexEditor
                         richTextBox1.Text = "";
                         richTextBox1.Text = sb.ToString();
                     }
-
+                    Cursor = Cursors.Default;
                 }
                 catch (Exception ex)
                 {
@@ -249,6 +250,7 @@ namespace RegexEditor
                    , MessageBoxButtons.OK, MessageBoxIcon.Error);
                     crl.WriteLog(CRLogger.CRLogTitle.Error, "Error while performing quick scan " + 
                         ex.Message);
+                    Cursor = Cursors.Default;
                 }
             }
         }
@@ -612,6 +614,11 @@ namespace RegexEditor
                 textEditorToolStripMenuItem.Checked = true;
                 comboBox1.Visible = false;
             }
+        }
+
+        private void scan(string dirPath)
+        {
+
         }
     }
 }
