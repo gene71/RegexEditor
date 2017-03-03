@@ -139,6 +139,13 @@ namespace RegexEditor
         /// <param name="e"></param>
         private void comboBox1_TextChanged(object sender, EventArgs e)
         {
+            //Action secondFooAsync = new Action(getMatch);
+
+            //secondFooAsync.BeginInvoke(new AsyncCallback(result =>
+            //{
+            //    (result.AsyncState as Action).EndInvoke(result);
+
+            //}), secondFooAsync);
             getMatch();
         }
         /// <summary>
@@ -205,7 +212,7 @@ namespace RegexEditor
         private void quickScanToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //TODO: add threading
-            Cursor = Cursors.WaitCursor;
+           
             crs.CRVID = "000000";//test id
             foreach (var p in comboBox1.Items)
             {
@@ -217,6 +224,7 @@ namespace RegexEditor
             {
                 MessageBox.Show("you must have at least one pattern ", "Warning"
                     , MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                
             }
             else if (crs.FileExtensions.Count < 1)
             {
@@ -227,6 +235,7 @@ namespace RegexEditor
             {
                 //do scan here
                 ScanEngine se = new ScanEngine();
+                Cursor = Cursors.WaitCursor;
                 try
                 {
                     DialogResult result = folderBrowserDialog1.ShowDialog();
@@ -577,9 +586,11 @@ namespace RegexEditor
         {
             if(!modeTextEditor())
             {
+                
                 int curr = richTextBox1.SelectionStart;
-                getMatch();
+               // Task.Factory.StartNew(() => getMatch());
                 richTextBox1.SelectionStart = curr;
+                //getMatch();
             }
             else
             {

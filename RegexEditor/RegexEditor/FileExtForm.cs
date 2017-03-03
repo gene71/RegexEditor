@@ -123,7 +123,7 @@ namespace RegexEditor
         /// <returns></returns>
         private bool validFileExt()
         {
-            if (Regex.IsMatch(comboBox1.Text, "[.][a-z]+"))
+            if (Regex.IsMatch(comboBox1.Text, "[.][A-z0-9]+"))
             {
                 return true;
             }
