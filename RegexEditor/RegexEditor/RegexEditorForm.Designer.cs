@@ -32,6 +32,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.regexProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scannerToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +69,6 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
-            this.regexProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -105,13 +105,19 @@
             this.regexProjectToolStripMenuItem,
             this.scannerToolStripMenuItem1});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.newToolStripMenuItem.Text = "New";
+            // 
+            // regexProjectToolStripMenuItem
+            // 
+            this.regexProjectToolStripMenuItem.Name = "regexProjectToolStripMenuItem";
+            this.regexProjectToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.regexProjectToolStripMenuItem.Text = "Regex Project";
             // 
             // scannerToolStripMenuItem1
             // 
             this.scannerToolStripMenuItem1.Name = "scannerToolStripMenuItem1";
-            this.scannerToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.scannerToolStripMenuItem1.Size = new System.Drawing.Size(145, 22);
             this.scannerToolStripMenuItem1.Text = "Scanner";
             this.scannerToolStripMenuItem1.Click += new System.EventHandler(this.scannerToolStripMenuItem1_Click);
             // 
@@ -121,7 +127,7 @@
             this.fileToolStripMenuItem1,
             this.scannerToolStripMenuItem});
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.openToolStripMenuItem.Text = "Open";
             // 
             // fileToolStripMenuItem1
@@ -144,7 +150,7 @@
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -152,21 +158,21 @@
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // saveTextToolStripMenuItem
             // 
             this.saveTextToolStripMenuItem.Name = "saveTextToolStripMenuItem";
-            this.saveTextToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveTextToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.saveTextToolStripMenuItem.Text = "Save Text";
             this.saveTextToolStripMenuItem.Click += new System.EventHandler(this.saveTextToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -379,12 +385,6 @@
             this.saveFileDialog1.DefaultExt = "rtf";
             this.saveFileDialog1.Filter = "files|*.rtf";
             // 
-            // regexProjectToolStripMenuItem
-            // 
-            this.regexProjectToolStripMenuItem.Name = "regexProjectToolStripMenuItem";
-            this.regexProjectToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.regexProjectToolStripMenuItem.Text = "Regex Project";
-            // 
             // RegexEditorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -396,7 +396,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "RegexEditorForm";
-            this.Text = "Regex Scanner";
+            this.Text = "Regex Scanner Alpha v.03132017";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
