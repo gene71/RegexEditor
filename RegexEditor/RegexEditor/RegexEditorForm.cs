@@ -1,6 +1,7 @@
 ﻿using CR.Core;
 using CR.Core.Services;
 using CR.Util;
+using RegexEditor.AppCache;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,7 @@ namespace RegexEditor
     {
         CRScanner crs;
         CRLogger crl;
+        public string workingScanDir = "";
         public static string fileSavePath;
         public RegexEditorForm()
         {
@@ -28,9 +30,52 @@ namespace RegexEditor
             crs = new CRScanner();
             fileSavePath = "";
             crl = new CRLogger();
-           
+         
         }
- 
+
+        /// <summary>
+        /// This constructor is used when original form calls another form
+        /// </summary>
+        /// <param name="Crs"></param>
+        /// <param name="Crl"></param>
+        /// <param name="FileSavepath"></param>
+        /// <param name="text"></param>
+        public RegexEditorForm(CRScanner Crs, CRLogger Crl, string FileSavepath,
+            string workDir, string text)
+        {
+            InitializeComponent();
+            infotextBox.Visible = false;//default view for infotextbox
+
+            //setup new scanner
+            crs = new CRScanner();
+            foreach (var p in Crs.Patterns)//add patterns
+            {
+                crs.Patterns.Add(p);
+            }
+
+            foreach (var fex in Crs.FileExtensions)//add file extensions
+            {
+                crs.FileExtensions.Add(fex);
+            }
+
+            
+            fileSavePath = FileSavepath;//set up the save path
+            crl = Crl;
+            richTextBox1.Text = text;
+            workingScanDir = workDir;//setup the working dir
+        }
+
+        public RegexEditorForm(RegexFormCache rpc)
+        {
+            InitializeComponent();
+            infotextBox.Visible = false;//default view for infotextbox
+
+            crs = rpc.CRS;
+            crl = rpc.CRL;
+            fileSavePath = rpc.FileSavePath;
+            workingScanDir = rpc.WorkingScanDir;
+        }
+
         /// <summary>
         /// lineNumbersToolStripMenuItem_Click handles the line numbers and view
         /// </summary>
@@ -72,7 +117,8 @@ namespace RegexEditor
 
             infotextBox.Text = "Line: " + line.ToString() + 
                 "\tScanner file associations: " + sb.ToString() +
-                "\tFile: " + fileSavePath + "\tScanner name: " + crs.Name;
+                "\tFile: " + fileSavePath + "\tScanner name: " + crs.Name +
+                "\tWorking Directory: " + workingScanDir;
 
         }
         /// <summary>
@@ -238,15 +284,30 @@ namespace RegexEditor
                 Cursor = Cursors.WaitCursor;
                 try
                 {
-                    DialogResult result = folderBrowserDialog1.ShowDialog();
-                    if (result == DialogResult.OK)
+                    if (workingScanDir == "")
                     {
-                        var vuls = se.GetVuls(folderBrowserDialog1.SelectedPath, crs);
+                        DialogResult result = folderBrowserDialog1.ShowDialog();
+                        if (result == DialogResult.OK)
+                        {
+                            var vuls = se.GetVuls(folderBrowserDialog1.SelectedPath, crs);
+                            //create the output
+                            StringBuilder sb = new StringBuilder();
+                            foreach (var v in vuls)
+                            {
+                                sb.AppendFormat("{0}\n", v.VulData());
+                            }
+                            richTextBox1.Text = "";
+                            richTextBox1.Text = sb.ToString();
+                        }
+                    }
+                    else
+                    {
+                        var vuls = se.GetVuls(workingScanDir, crs);
                         //create the output
                         StringBuilder sb = new StringBuilder();
                         foreach (var v in vuls)
                         {
-                            sb.AppendFormat("{0}\n", v);
+                            sb.AppendFormat("{0}\n", v.VulData());
                         }
                         richTextBox1.Text = "";
                         richTextBox1.Text = sb.ToString();
@@ -631,5 +692,97 @@ namespace RegexEditor
         {
 
         }
+
+        /// <summary>
+        /// This event handler opens a new RegexEditorForm with the contents
+        /// of the file for the selected path passed into the context menu 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void goToToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string fileText = File.ReadAllText(richTextBox1.SelectedText);
+                RegexEditorForm regexf = new RegexEditorForm(this.crs, this.crl,
+                RegexEditorForm.fileSavePath, this.workingScanDir, fileText);
+                regexf.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+           
+        }
+
+        private void workingDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = folderBrowserDialog1.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                workingScanDir = folderBrowserDialog1.SelectedPath;
+            }
+        }
+
+        private void matchSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //do scan here
+            ScanEngine se = new ScanEngine();
+            CRScanner newcrsanner = new CRScanner();
+            newcrsanner.Patterns.Add(richTextBox1.SelectedText);
+            foreach (var fex in crs.FileExtensions)
+            {
+                newcrsanner.FileExtensions.Add(fex);
+            }
+
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                if (workingScanDir == "")
+                {
+                    DialogResult result = folderBrowserDialog1.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        var vuls = se.GetVuls(folderBrowserDialog1.SelectedPath, newcrsanner);
+                        //create the output
+                        StringBuilder sb = new StringBuilder();
+                        foreach (var v in vuls)
+                        {
+                            sb.AppendFormat("{0}\n", v.VulData());
+                        }
+
+                        //call new reg form here
+                        RegexEditorForm newref = new RegexEditorForm(newcrsanner, crl,
+                            RegexEditorForm.fileSavePath, this.workingScanDir, sb.ToString());
+                        newref.Show();
+                    }
+                }
+                else
+                {
+                    var vuls = se.GetVuls(workingScanDir, newcrsanner);
+                    //create the output
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var v in vuls)
+                    {
+                        sb.AppendFormat("{0}\n", v.VulData());
+                    }
+                    //call new reg form here
+                    RegexEditorForm newref = new RegexEditorForm(newcrsanner, crl,
+                        RegexEditorForm.fileSavePath, this.workingScanDir, sb.ToString());
+                    newref.Show();
+                }
+                Cursor = Cursors.Default;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error"
+               , MessageBoxButtons.OK, MessageBoxIcon.Error);
+                crl.WriteLog(CRLogger.CRLogTitle.Error, "Error while performing quick scan " +
+                    ex.Message);
+                Cursor = Cursors.Default;
+            }
+        }
+
     }
 }

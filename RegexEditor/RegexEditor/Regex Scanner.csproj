@@ -56,6 +56,9 @@
     <Compile Include="AddMulPatForm.Designer.cs">
       <DependentUpon>AddMulPatForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppCache\RegexFormCache.cs" />
+    <Compile Include="AppCache\RegexProject.cs" />
+    <Compile Include="AppCache\RegexSerializer.cs" />
     <Compile Include="FileExtForm.cs">
       <SubType>Form</SubType>
     </Compile>
