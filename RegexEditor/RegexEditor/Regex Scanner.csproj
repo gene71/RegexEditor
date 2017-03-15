@@ -37,6 +37,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CR.Core\CR.Core\bin\Debug\CR.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,6 +57,7 @@
     <Compile Include="AddMulPatForm.Designer.cs">
       <DependentUpon>AddMulPatForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppCache\AppData.cs" />
     <Compile Include="AppCache\RegexFormCache.cs" />
     <Compile Include="AppCache\RegexProject.cs" />
     <Compile Include="AppCache\RegexSerializer.cs" />

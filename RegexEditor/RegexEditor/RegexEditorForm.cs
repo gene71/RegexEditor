@@ -20,13 +20,17 @@ namespace RegexEditor
     {
         CRScanner crs;
         CRLogger crl;
+        
         public string workingScanDir = "";
         public static string fileSavePath;
+        public static string projectName = "";
+        string projDir = "Projects";
+        bool automatch = false;
         public RegexEditorForm()
         {
             InitializeComponent();
-            infotextBox.Visible = false;//default view for infotextbox
-    
+            initFrom();//common form setup method
+
             crs = new CRScanner();
             fileSavePath = "";
             crl = new CRLogger();
@@ -44,7 +48,7 @@ namespace RegexEditor
             string workDir, string text)
         {
             InitializeComponent();
-            infotextBox.Visible = false;//default view for infotextbox
+            initFrom();//common form setup method
 
             //setup new scanner
             crs = new CRScanner();
@@ -68,7 +72,7 @@ namespace RegexEditor
         public RegexEditorForm(RegexFormCache rpc)
         {
             InitializeComponent();
-            infotextBox.Visible = false;//default view for infotextbox
+            initFrom();//common form setup method
 
             crs = rpc.CRS;
             crl = rpc.CRL;
@@ -76,6 +80,47 @@ namespace RegexEditor
             workingScanDir = rpc.WorkingScanDir;
         }
 
+        public RegexEditorForm(RegexProject rp)
+        {
+            InitializeComponent();
+            initFrom();//common form setup method
+
+            //setup new scanner
+            crs = new CRScanner();
+            foreach (var p in rp.ProjScanner.Patterns)//add patterns
+            {
+                crs.Patterns.Add(p);
+            }
+
+            foreach (var fex in rp.ProjScanner.FileExtensions)//add file extensions
+            {
+                crs.FileExtensions.Add(fex);
+            }
+            
+            //fileSavePath = FileSavepath;//set up the save path
+            //crl = Crl;
+            //richTextBox1.Text = text;
+            workingScanDir = rp.ProjWorkingDirectory;//setup the working dir
+            this.Text += " *" + rp.RegexProjName;
+        }
+
+        /// <summary>
+        /// this method performs initialzation for common form
+        /// items
+        /// </summary>
+        private void initFrom()
+        {
+            //make the projects directory
+            if (!Directory.Exists(projDir))
+            {
+                Directory.CreateDirectory(projDir);
+            }
+            //default value needs to be false if infotextBox.Visible = true
+            lineNumbersToolStripMenuItem.Checked = true;
+            //change comment line above if line below is uncommented 
+            //infotextBox.Visible = false;//default view for infotextbox
+            
+        }
         /// <summary>
         /// lineNumbersToolStripMenuItem_Click handles the line numbers and view
         /// </summary>
@@ -192,7 +237,12 @@ namespace RegexEditor
             //    (result.AsyncState as Action).EndInvoke(result);
 
             //}), secondFooAsync);
-            getMatch();
+            if(automatch && richTextBox1.Lines.Length < 150)
+            {
+                getMatch();
+
+            }
+            
         }
         /// <summary>
         /// calls an update for information in the line count text feild and calls
@@ -210,7 +260,7 @@ namespace RegexEditor
                     comboBox1.Items.Add(p);
                 }
             }
-            getMatch();
+            //getMatch();
         }
         /// <summary>
         /// Updates the combobox items when it is clicked
@@ -651,7 +701,11 @@ namespace RegexEditor
                 int curr = richTextBox1.SelectionStart;
                // Task.Factory.StartNew(() => getMatch());
                 richTextBox1.SelectionStart = curr;
-                //getMatch();
+                if (automatch && richTextBox1.Lines.Length < 30 )
+                {
+                    getMatch();
+                }
+
             }
             else
             {
@@ -784,5 +838,302 @@ namespace RegexEditor
             }
         }
 
+        private void getCharCountForSelectedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = richTextBox1.SelectedText;
+            
+            MessageBox.Show("Length of selected value  is\n" + s.Length, "Ifno",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void getHexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = richTextBox1.SelectedText;
+            char[] ca = s.ToCharArray();
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < ca.Length; i++)
+            {
+                string hex = Convert.ToByte(ca[i]).ToString("x");
+                sb.AppendFormat(" 0x{0} ", hex);
+            }
+            string hexstring = sb.ToString();
+            MessageBox.Show("Hex for selected value is\n" + sb.ToString(), "Ifno",
+               MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void getAssciiToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = richTextBox1.SelectedText;
+            char[] ca = s.ToCharArray();
+                        
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < ca.Length; i++)
+            {
+                string b = Convert.ToByte(ca[i]).ToString();
+                sb.AppendFormat(" {0} ", b);
+            }
+            string bstring = sb.ToString();
+            MessageBox.Show("Asscii values for selected value is\n" + sb.ToString(), "Ifno",
+               MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void getBinaryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = richTextBox1.SelectedText;
+            char[] ca = s.ToCharArray();
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < ca.Length; i++)
+            {
+                sb.AppendFormat(" {0} ", 
+                    Convert.ToString(ca[i], 2).PadLeft(8, '0'));
+            }
+            string bstring = sb.ToString();
+            MessageBox.Show("Binary values for selected value is\n" + sb.ToString(), "Ifno",
+               MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void getMemSizebytesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = richTextBox1.SelectedText;
+            char[] ca = s.ToCharArray();
+            int bytesize = ca.Length + 1;
+            MessageBox.Show("Bytes needed for selected value with \\0\n" + bytesize, "Ifno",
+               MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+        /// <summary>
+        /// This event handler saves the CRProject
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void saveProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.Text.Contains(" *"))
+            {
+               //just save
+                try
+                {
+
+                    RegexProject rp = new RegexProject();
+                    //rp.RegexProjName = Microsoft.VisualBasic.Interaction.InputBox(
+                    //    "Project Name", "Regex Project", "Project_Name");
+                    //get and set project name
+                    string[] sa = this.Text.Split('*');
+                    rp.RegexProjName = sa[1];
+                    rp.ProjWorkingDirectory = this.workingScanDir;
+                    rp.ProjScanner = this.crs;
+                   
+                    RegexSerializer.Save(projDir + "\\" +
+                        rp.RegexProjName + ".rp", rp);
+                    MessageBox.Show(rp.RegexProjName + " saved", "Info",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                //call save new project
+                //saveProjectAsToolStripMenuItem_Click(this, null);
+                regexProjectToolStripMenuItem_Click(this, null);
+            }
+            
+            
+
+        }
+        /// <summary>
+        /// This event handler provides a dialog to open a regex project file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void projectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                openFileDialog1.InitialDirectory = Environment.CurrentDirectory +
+                    "\\" + projDir;
+                DialogResult result = openFileDialog1.ShowDialog();
+                
+                if (result == DialogResult.OK)
+                {
+                    FileInfo fi = new FileInfo(openFileDialog1.FileName);
+                    if (fi.Extension == ".rp")
+                    {
+                        //call open here
+                        RegexProject rp = RegexSerializer.LoadRegexProject(fi.FullName);
+                        this.Text += " *" + rp.RegexProjName;
+                        this.crs = rp.ProjScanner;
+                        this.workingScanDir = rp.ProjWorkingDirectory;
+                        
+                       
+                      
+
+                    }
+                    else
+                    {
+                        throw new Exception("error opening RegexProject fiel: wrong file type");
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(" error opening file " + ex.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                crl.WriteLog(CRLogger.CRLogTitle.Error, "Error while opening file " +
+                        ex.Message);
+            }
+        }
+        /// <summary>
+        /// this event handler opens the project save as dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void saveProjectAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                RegexProject rp = new RegexProject();
+                rp.RegexProjName = Microsoft.VisualBasic.Interaction.InputBox(
+                    "Project Name", "Regex Project", "Project_Name");
+                rp.ProjWorkingDirectory = this.workingScanDir;
+                rp.ProjScanner = this.crs;
+                RegexSerializer.Save(projDir + "\\" +
+                    rp.RegexProjName + ".rp", rp);
+                if (this.Text.Contains(" *"))
+                {
+                    //first remove
+                    string[] sa = this.Text.Split('*');
+                    this.Text = sa[0] + "*" + rp.RegexProjName;
+                }
+                else
+                {
+                    this.Text += @" *" + rp.RegexProjName;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error",
+               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void regexProjectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.Text.Contains(" *"))
+            {
+                //call save as
+            }
+            else
+            {
+                try
+                {
+
+                    RegexProject rp = new RegexProject();
+                    rp.RegexProjName = Microsoft.VisualBasic.Interaction.InputBox(
+                        "Project Name", "Regex Project", "Project_Name");
+
+                    rp.ProjWorkingDirectory = this.workingScanDir;
+                    rp.ProjScanner = this.crs;
+
+                    RegexSerializer.Save(projDir + "\\" +
+                        rp.RegexProjName + ".rp", rp);
+
+                    MessageBox.Show(rp.RegexProjName + " saved", "Info",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Text += @" *" + rp.RegexProjName;
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error",
+                   MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            
+        }
+
+        //private void autoMatchToolStripMenuItem_Click(object sender, EventArgs e)
+        //{
+        //    if(autoMatchToolStripMenuItem.Checked)
+        //    {
+        //        autoMatchToolStripMenuItem.Checked = false;
+        //        //set flag
+        //        automatch = false;
+        //    }else if(!autoMatchToolStripMenuItem.Checked)
+        //    {
+        //        autoMatchToolStripMenuItem.Checked = true;
+        //        //set flag
+        //        //fire warning message
+        //        MessageBox.Show("Large amounts of text and auto matching can degrade performance.",
+        //            "Warning",
+        //           MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //        automatch = true;
+        //    }
+        //}
+
+        private void testToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            getMatch();
+        }
+
+        private void clearTextToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text = "";
+        }
+
+        private void autoMatchToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (autoMatchToolStripMenuItem1.Checked)
+            {
+                autoMatchToolStripMenuItem1.Checked = false;
+                //set flag
+                automatch = false;
+            }
+            else if (!autoMatchToolStripMenuItem1.Checked)
+            {
+                autoMatchToolStripMenuItem1.Checked = true;
+                //set flag
+                //fire warning message
+                MessageBox.Show("Large amounts of text and auto matching can degrade performance.",
+                    "Warning",
+                   MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                automatch = true;
+            }
+        }
+
+        private void detailsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("File path: {0}\n", fileSavePath);
+                sb.AppendFormat("Scanner name: {0}\n", crs.Name);
+                sb.AppendFormat("Scanner description: {0}\n", crs.Description);
+                sb.AppendFormat("Pattern count: {0}\n", crs.Patterns.Count);
+                sb.AppendFormat("File associations: {0}", " ");
+                foreach (var fex in crs.FileExtensions)
+                {
+                    sb.AppendFormat("{0},", fex);
+                }
+                sb.AppendFormat("{0}", "\n");
+                sb.AppendFormat("Auto Match: {0}", automatch);
+                richTextBox1.Text = "";
+                richTextBox1.Text = sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                crl.WriteLog(CRLogger.CRLogTitle.Error, "Error showing scanner details " +
+                        ex.Message);
+            }
+        }
     }
 }

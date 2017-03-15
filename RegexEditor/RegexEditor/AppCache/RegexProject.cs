@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CR.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace RegexEditor.AppCache
     public class RegexProject
     {
         public string RegexProjName { get; set; }
-        public List<RegexFormCache> RegexForms { get; set; }
+        public string ProjWorkingDirectory { get; set; }
+        public CRScanner ProjScanner { get; set; } 
+        //public List<RegexFormCache> RegexForms { get; set; }
     }
 }
