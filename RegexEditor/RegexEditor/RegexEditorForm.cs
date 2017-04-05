@@ -344,7 +344,8 @@ namespace RegexEditor
                             StringBuilder sb = new StringBuilder();
                             foreach (var v in vuls)
                             {
-                                sb.AppendFormat("{0}\n", v.VulData());
+                                //sb.AppendFormat("{0}\n", v.VulData());
+                                sb.AppendFormat("{0}\n", v.ToString());
                             }
                             richTextBox1.Text = "";
                             richTextBox1.Text = sb.ToString();
@@ -357,7 +358,8 @@ namespace RegexEditor
                         StringBuilder sb = new StringBuilder();
                         foreach (var v in vuls)
                         {
-                            sb.AppendFormat("{0}\n", v.VulData());
+                            //sb.AppendFormat("{0}\n", v.VulData());
+                            sb.AppendFormat("{0}\n", v.ToString());
                         }
                         richTextBox1.Text = "";
                         richTextBox1.Text = sb.ToString();
@@ -803,7 +805,8 @@ namespace RegexEditor
                         StringBuilder sb = new StringBuilder();
                         foreach (var v in vuls)
                         {
-                            sb.AppendFormat("{0}\n", v.VulData());
+                            //sb.AppendFormat("{0}\n", v.VulData());
+                            sb.AppendFormat("{0}\n", v.ToString());
                         }
 
                         //call new reg form here
@@ -819,7 +822,8 @@ namespace RegexEditor
                     StringBuilder sb = new StringBuilder();
                     foreach (var v in vuls)
                     {
-                        sb.AppendFormat("{0}\n", v.VulData());
+                        //sb.AppendFormat("{0}\n", v.VulData());
+                        sb.AppendFormat("{0}\n", v.ToString());
                     }
                     //call new reg form here
                     RegexEditorForm newref = new RegexEditorForm(newcrsanner, crl,

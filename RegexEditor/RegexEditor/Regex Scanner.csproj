@@ -33,8 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CR.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CR.Core">
       <HintPath>..\..\..\CR.Core\CR.Core\bin\Debug\CR.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
