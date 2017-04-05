@@ -193,7 +193,10 @@ namespace RegexEditor
         /// </summary>
         private void getMatch()
         {
-           
+            if(comboBox1.Text == "." || comboBox1.Text == "\\")//do not process these without another char due to performance
+            {
+                return;
+            }
             try
             {
                 if (!modeTextEditor())//do the match
@@ -237,7 +240,7 @@ namespace RegexEditor
             //    (result.AsyncState as Action).EndInvoke(result);
 
             //}), secondFooAsync);
-            if(automatch && richTextBox1.Lines.Length < 150)
+            if(automatch && richTextBox1.Lines.Length < 30)
             {
                 getMatch();
 
@@ -702,7 +705,7 @@ namespace RegexEditor
                 
                 int curr = richTextBox1.SelectionStart;//grap cursor postion
                                
-                if (automatch && richTextBox1.Lines.Length < 150 )//more than 150 lines causes issues
+                if (automatch && richTextBox1.Lines.Length < 30 )//more than 30 lines causes issues
                 {
                     getMatch();
                 }
@@ -1105,7 +1108,9 @@ namespace RegexEditor
                 autoMatchToolStripMenuItem1.Checked = true;
                 //set flag
                 //fire warning message
-                MessageBox.Show("Large amounts of text and auto matching can degrade performance.",
+                MessageBox.Show("Large amounts of text and "+
+                    "auto matching can degrade performance.\n" +
+                    "Auto line count matching limited to 30 lines...",
                     "Warning",
                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 automatch = true;
@@ -1137,6 +1142,58 @@ namespace RegexEditor
                 crl.WriteLog(CRLogger.CRLogTitle.Error, "Error showing scanner details " +
                         ex.Message);
             }
+        }
+        /// <summary>
+        /// This event hanlder hashed the working directory and
+        /// displays hashes to the main form
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void hashWorkingDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FileUtil fu = new FileUtil();
+            try
+            {
+                if (workingScanDir == "")
+                {
+                    throw new Exception("Working Scan Directory must be set");
+                }
+                else if (crs.FileExtensions.Count < 1)
+                {
+                    throw new Exception("Files extesions must be set");
+                }
+                else
+                {
+                    //change to wait icon
+                    Cursor = Cursors.WaitCursor;
+                    StringBuilder sb = new StringBuilder();
+                    var files = fu.GetFiles(workingScanDir);//gets all files in working dir
+                    foreach(var f in files)
+                    {
+                        FileInfo fi = new FileInfo(f);
+                        foreach(var fex in crs.FileExtensions)//filer out not scanned files
+                        {
+                            if(fi.Extension == fex)
+                            {
+                                sb.AppendFormat("{0} {1}\n", fi.Name,
+                                    FileUtil.GetMD5Hash(fi.FullName));
+                            }
+                        }
+
+                    }
+                    //set back to normal icon
+                    Cursor = Cursors.Default;
+                    //send contents to form
+                    richTextBox1.Text = sb.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                //set back to normal icon
+                Cursor = Cursors.Default;
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
         }
     }
 }
