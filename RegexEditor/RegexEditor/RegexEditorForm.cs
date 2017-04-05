@@ -700,14 +700,13 @@ namespace RegexEditor
             if(!modeTextEditor())
             {
                 
-                int curr = richTextBox1.SelectionStart;
-               // Task.Factory.StartNew(() => getMatch());
-                richTextBox1.SelectionStart = curr;
-                if (automatch && richTextBox1.Lines.Length < 30 )
+                int curr = richTextBox1.SelectionStart;//grap cursor postion
+                               
+                if (automatch && richTextBox1.Lines.Length < 150 )//more than 150 lines causes issues
                 {
                     getMatch();
                 }
-
+                richTextBox1.SelectionStart = curr;//place cursor postion back after the update
             }
             else
             {
